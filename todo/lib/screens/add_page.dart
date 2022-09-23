@@ -25,8 +25,17 @@ class _AddPageState extends State<AddPage> {
       backgroundColor: lastColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          showModalBottomSheet(context: context, builder: (context) =>
+          
+             Center(
+              child: ElevatedButton(
+                child: const Text('Close'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          );
           setState(() {
-            itemsList.add(Items('house is here', false));
+            //itemsList.add(Items('house is here', false));
           });
         },
         backgroundColor: secondColor,
@@ -37,61 +46,61 @@ class _AddPageState extends State<AddPage> {
         ),
       ),
       body: Padding(
-          padding: const EdgeInsets.only(top: 10.0),
-          child: ListView.builder(
-            itemCount: itemsList.length,
-            itemBuilder: (context, int index) {
-              return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: thirdColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: secondColor.withOpacity(0.4),
-                        spreadRadius: 1,
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      )
-                    ],
+        padding: const EdgeInsets.only(top: 10.0),
+        child: ListView.builder(
+          itemCount: itemsList.length,
+          itemBuilder: (context, int index) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: thirdColor,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10.0),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListTile(
-                      leading: Checkbox(
-                        checkColor: thirdColor,
-                        fillColor: MaterialStateProperty.resolveWith((states) {
-                          return secondColor;
-                        }),
-                        value: itemsList[index].isFinished,
-                        onChanged: (value) {
-                          setState(() {
-                            itemsList[index].isFinished = value!;
-                          });
-                        },
-                      ),
-                      title: Text(itemsList[index].label),
-                      trailing: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            itemsList.removeAt(index);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.redAccent,
-                        ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: secondColor.withOpacity(0.4),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    )
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ListTile(
+                    leading: Checkbox(
+                      checkColor: thirdColor,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        return secondColor;
+                      }),
+                      value: itemsList[index].isFinished,
+                      onChanged: (value) {
+                        setState(() {
+                          itemsList[index].isFinished = value!;
+                        });
+                      },
+                    ),
+                    title: Text(itemsList[index].label),
+                    trailing: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          itemsList.removeAt(index);
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.redAccent,
                       ),
                     ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
+      ),
     );
   }
 }

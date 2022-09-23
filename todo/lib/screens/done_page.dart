@@ -12,7 +12,16 @@ class _DonePageState extends State<DonePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: lastColor,
+      appBar: AppBar(
+        backgroundColor: mainColor,
+        title: const Text(
+          'Completed',
+          style: TextStyle(color: lastColor),
+        ),
+        elevation: 0,
+      ),
+     
     );
   }
 }
