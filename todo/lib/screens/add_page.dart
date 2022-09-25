@@ -34,6 +34,7 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: mainColor,
         title: const Text(
@@ -54,35 +55,38 @@ class _AddPageState extends State<AddPage> {
           size: 40.0,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: ListView.builder(
-          itemCount: db.itemsList.length,
-          itemBuilder: (context, int index) {
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: thirdColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10.0),
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: ListView.builder(
+            itemCount: db.itemsList.length,
+            itemBuilder: (context, int index) {
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: thirdColor,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: secondColor.withOpacity(0.4),
+                        spreadRadius: 1,
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      )
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: secondColor.withOpacity(0.4),
-                      spreadRadius: 1,
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    )
-                  ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: listTileBody(index),
+                  ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: listTileBody(index),
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -101,7 +105,7 @@ class _AddPageState extends State<AddPage> {
           setState(() {
             db.itemsList[index].isFinished = value!;
           });
-          //db.updateDatabase();
+          // db.updateDatabase();
         },
       ),
       title: Text(
