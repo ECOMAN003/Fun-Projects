@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../colors.dart';
-import '../items.dart';
+import '../data.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -10,8 +11,26 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  List<Items> itemsList = [];
+  //reference the Hive Box
+  final _myBox = Hive.box('mybox');
+
+  Items db = Items('', false);
+
+  @override
+  void initState() {
+    //if first time, create default data
+    if (_myBox.get('TODOLIST') == null) {
+      db.createInitialData();
+    } else {
+      //already exists
+      db.loadData();
+    }
+    super.initState();
+  }
+
+  //inout text controller
   final _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +57,7 @@ class _AddPageState extends State<AddPage> {
       body: Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: ListView.builder(
-          itemCount: itemsList.length,
+          itemCount: db.itemsList.length,
           itemBuilder: (context, int index) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
@@ -69,7 +88,7 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
-//listTile 
+//listTile
   ListTile listTileBody(int index) {
     return ListTile(
       leading: Checkbox(
@@ -77,17 +96,18 @@ class _AddPageState extends State<AddPage> {
         fillColor: MaterialStateProperty.resolveWith((states) {
           return secondColor;
         }),
-        value: itemsList[index].isFinished,
+        value: db.itemsList[index].isFinished,
         onChanged: (value) {
           setState(() {
-            itemsList[index].isFinished = value!;
+            db.itemsList[index].isFinished = value!;
           });
+          //db.updateDatabase();
         },
       ),
       title: Text(
-        itemsList[index].label,
+        db.itemsList[index].label,
         style: TextStyle(
-            decoration: itemsList[index].isFinished
+            decoration: db.itemsList[index].isFinished
                 ? TextDecoration.lineThrough
                 : TextDecoration.none,
             color: mainColor),
@@ -95,8 +115,9 @@ class _AddPageState extends State<AddPage> {
       trailing: IconButton(
         onPressed: () {
           setState(() {
-            itemsList.removeAt(index);
+            db.itemsList.removeAt(index);
           });
+          //db.updateDatabase();
         },
         icon: const Icon(
           Icons.delete,
@@ -176,8 +197,10 @@ class _AddPageState extends State<AddPage> {
 //create new Task
   void createTask() {
     setState(() {
-      itemsList.add(Items(_textController.text, false));
+      db.itemsList.add(Items(_textController.text, false));
+      //db.itemsList.add([_textController.text, false]);
     });
+    //db.updateDatabase();
     _textController.clear();
   }
 }
